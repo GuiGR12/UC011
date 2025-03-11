@@ -12,6 +12,10 @@ public class ProdutosDTO {
     private String nome;
     private Integer valor;
     private String status;
+    
+    public ProdutosDTO (){
+        
+    }
 
     public Integer getId() {
         return id;
