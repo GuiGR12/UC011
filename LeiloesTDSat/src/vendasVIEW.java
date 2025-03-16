@@ -19,7 +19,7 @@ public class vendasVIEW extends javax.swing.JFrame {
      */
     public vendasVIEW() {
         initComponents();
-        
+        listarProdutosVendidos();
     }
 
     /**
@@ -36,6 +36,7 @@ public class vendasVIEW extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         listaProdutosVendidos = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -63,10 +64,17 @@ public class vendasVIEW extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Nome", "Valor", "Status"
             }
         ));
         jScrollPane2.setViewportView(listaProdutosVendidos);
+
+        jButton1.setText("Voltar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -79,8 +87,10 @@ public class vendasVIEW extends javax.swing.JFrame {
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(35, 35, 35)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 635, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(31, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 629, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -88,12 +98,18 @@ public class vendasVIEW extends javax.swing.JFrame {
                 .addGap(30, 30, 30)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 451, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -131,6 +147,7 @@ public class vendasVIEW extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -138,4 +155,26 @@ public class vendasVIEW extends javax.swing.JFrame {
     private javax.swing.JTable listaProdutosVendidos;
     // End of variables declaration//GEN-END:variables
 
+    private void listarProdutosVendidos(){
+            try {
+                ProdutosDAO produtosdao = new ProdutosDAO();
+
+                DefaultTableModel model = (DefaultTableModel) listaProdutosVendidos.getModel();
+                model.setNumRows(0);
+
+                List<ProdutosDTO> listaVenda = produtosdao.listarProdutosVendidos();
+
+                for(int i = 0; i < listaVenda.size(); i++){
+                    model.addRow(new Object[]{
+                        listaVenda.get(i).getId(),
+                        listaVenda.get(i).getNome(),
+                        listaVenda.get(i).getValor(),
+                        listaVenda.get(i).getStatus()
+                    });
+                }
+            } catch (Exception e) {
+        }
+    
+    }
+    
 }
