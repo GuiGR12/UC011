@@ -23,6 +23,7 @@ public class ProdutosDAO {
     PreparedStatement prep;
     ResultSet resultset;
     ArrayList<ProdutosDTO> listagem = new ArrayList<>();
+    ArrayList<ProdutosDTO> listaVendidos = new ArrayList<>();
     
     public int cadastrarProduto (ProdutosDTO produto){
               
@@ -70,8 +71,50 @@ public class ProdutosDAO {
             return listagem;
     }
     
-    
-    
+    public int venderProduto (int id){
         
+        conn = new conectaDAO().connectDB();
+        int status;
+        try {
+            prep = conn.prepareStatement("UPDATE produtos SET status = ? WHERE id = ?");
+            prep.setString(1, "Vendido");
+            prep.setInt(2, id);
+            status = prep.executeUpdate();
+            return status;
+        } catch (SQLException ex) {
+            System.out.println("Erro ao conectar: " + ex.getMessage());
+            return ex.getErrorCode();
+        }
+    }  
+    
+    public ArrayList<ProdutosDTO> listarProdutosVendidos(){
+        
+        try {
+            
+            conn = new conectaDAO().connectDB();
+                        
+            prep = conn.prepareStatement("SELECT * from produtos WHERE status = ?");
+            prep.setString(1, "Vendido");                                                       
+            resultset = prep.executeQuery();
+                                   
+            while(resultset.next()){
+                ProdutosDTO produto = new ProdutosDTO();
+                
+                produto.setId(resultset.getInt("id"));
+                produto.setNome(resultset.getString("nome"));
+                produto.setValor(resultset.getInt("valor"));
+                produto.setStatus(resultset.getString("status"));
+                
+                listaVendidos.add(produto);
+                
+            }
+                                    
+        } catch (SQLException ex) {
+            System.out.println("Erro ao conectar: " + ex.getMessage());
+            return null;
+        }
+            return listaVendidos;
+    }
+    
 }
 
